@@ -16,14 +16,16 @@
 #  limitations under the License.
 ############################################################################
 
+# IMPORTANT: Works on Windows 10 Pro/Enterprise (16299+) or Windows 10 Home (18362.1040+)
 
-#run in command promp as admin:  powershell -executionpolicy bypass -File install-dev.ps1 
+#To run in command promp as admin:  powershell -executionpolicy bypass -File install-dev.ps1 
 
 #Enable wsl options
+
 dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
 dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
 
-$Packages = 'git --package-parameters="'/GitAndUnixToolsOnPath /WindowsTerminal'"',
+$Packages = 'git',
             'vscode',
             'docker-desktop',
             'wsl2' #docker desktop needs wsl2 linux kernel
@@ -45,11 +47,12 @@ Else {
     }
 }
 
-# Install vscode extensions
 
-# Fetch rest of folders
+# Fetch magic folder
 
-git clone https://github.com/cgmon/magic 
+git clone https://github.com/cgmon/magic.git
+
+# Install vscode remote container extension
 
 code --install-extension ms-vscode-remote.remote-containers
 

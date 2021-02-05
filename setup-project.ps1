@@ -39,27 +39,6 @@ $FoldersPermissions = '1000:1000',
 		      '999:999',
 		      '999'
 		
-$devjson = @{
-	'extensions'= @('devonfw.devonfw-extension-pack')
-	'settings' = @{'terminal.integrated.shell.linux'= '/bin/bash'}
-	'dockerComposeFile' = @("../$APP_DOCKER_COMPOSE_DEFAULT_FILENAME","docker-compose.yml")
-	'workspaceFolder' = "/workspace"
-	'service'= "$APP_DEV_SERVICE"
-}
-
-$dockercomposeyml= "version: '3'
-services:
-  ${APP_DEV_SERVICE}:
-    volumes:
-      - .:/workspace:cached
-    command: /bin/sh -c `"while sleep 1000; do :; done`"
-"
-#mkdir -p ./.devcontainer
-
-#$dockercomposeyml | Out-File -FilePath ./.devcontainer/docker-compose.yml
-
-#$devjson | ConvertTo-Json -Compress | Out-File -FilePath ./.devcontainer/devcontainer.json
-
 #Create mount folders
 
 ForEach ($Folder in $Folders)
@@ -67,17 +46,6 @@ ForEach ($Folder in $Folders)
         mkdir -p ./volumes/$Folder
 	wsl chown $FoldersPermissions[$Folders.IndexOf($Folder)] ./volumes/$Folder
     }
-
-#Update with host's IP docker-compose-copy.yml
-
-#ls -recurse -Include docker-compose.yml | % {sp $_ isreadonly $false; (Get-Content $_) -replace "IP_ADDRESS","$IP" | Set-Content -Path ./docker-compose.refined.yml}
-
-# Add current user to docker- groups
-
-#$user=[System.Security.Principal.WindowsIdentity]::GetCurrent().Name
-#net localgroup docker-users $user /add
-
-
 
 # increase max map count
 
@@ -88,9 +56,10 @@ powershell wsl -d docker-desktop "sysctl -w vm.max_map_count=262144"
 mv ./jenkins/jobs/ ./volumes/jenkins/jenkins_home/
 
 #Docker compose up sonar, sonar-db, jenkins 
+
 docker-compose -f docker-compose.yml up -d --build
 
-# git clone repo
+# git clone app repo
 
 git clone $APP_REPO $APP_FOLDER_NAME
 
