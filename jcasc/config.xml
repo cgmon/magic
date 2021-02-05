@@ -1,0 +1,113 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.39">
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.80">
+    <script>
+    
+node{
+        
+   stage(&apos;GitSCM&apos;){
+       git branch: &apos;develop&apos;, url: &apos;file:///var/lib/jenkins/repo&apos;
+   }
+   /*
+    stage(&apos;Loading Custom Tools&apos;) {
+        def node = tool name: &apos;Node 12.16 LTS&apos;, type: &apos;jenkins.plugins.nodejs.tools.NodeJSInstallation&apos;
+        env.PATH = &quot;${node}/bin:${env.PATH}&quot;
+        sh &quot;npm i -g yarn&quot;
+    }
+    
+    stage(&apos;Fresh Dependency Installation&apos;) {
+        sh &quot;&quot;&quot;
+            cd angular
+            #find . -name &quot;node_modules&quot; -exec rm -rf &apos;{}&apos; +
+            yarn
+        &quot;&quot;&quot;
+    }
+    
+    stage(&apos;Code Linting&apos;) {
+        sh &quot;&quot;&quot;
+            cd angular
+            yarn lint
+        &quot;&quot;&quot;
+    }
+    
+    stage(&apos;Execute Angular tests&apos;) {
+        sh &quot;&quot;&quot;
+            cd angular
+            yarn test:ci
+        &quot;&quot;&quot;
+    }
+    
+    stage(&apos;Build Application&apos;) {
+        sh &quot;&quot;&quot;
+            cd angular
+            yarn build:prod
+        &quot;&quot;&quot;
+    }
+    */
+    
+     stage(&quot;build &amp; SonarQube analysis&quot;) {
+              
+                   def scannerHome = tool &quot;sonarqube&quot;
+                        withSonarQubeEnv(&quot;sonarqube&quot;) {
+                            sh &quot;&quot;&quot;
+                                ${scannerHome}/bin/sonar-scanner \
+                                    -Dsonar.projectKey=&apos;myapp&apos; \
+                                    -Dsonar.projectName=&apos;myapp&apos; \
+                                    -Dsonar.projectVersion=&apos;1.0.0&apos; \
+                                    -Dsonar.sources=&apos;angular/src&apos;\
+                                    -Dsonar.webhooks.project=http://jenkins.localhost/sonarqube-webhook/
+                            &quot;&quot;&quot;
+    
+              }
+      }
+
+      stage(&quot;Quality Gate&quot;){
+          timeout(time: 1, unit: &apos;HOURS&apos;) {
+              def qg = waitForQualityGate()
+              if (qg.status != &apos;OK&apos;) {
+                  error &quot;Pipeline aborted due to quality gate failure: ${qg.status}&quot;
+              }
+          }
+      }
+      /*
+    stage(&apos;Build Image&apos;){
+        sh &quot;&quot;&quot;
+        cd angular
+        docker build . -t myapp:latest
+        &quot;&quot;&quot;
+    }
+       stage(&apos;List images&apos;){
+        sh &quot;&quot;&quot;
+        docker images
+        &quot;&quot;&quot;
+    }
+    stage(&apos;Run Image&apos;){
+        sh &quot;&quot;&quot;
+        cd angular
+        docker stop app || true &amp;&amp; docker rm app || true
+        docker run -d \
+            --name app \
+            --publish 7200:80 \
+            myapp:latest
+        &quot;&quot;&quot;
+    }
+    */
+     
+                  
+
+    
+  
+    
+   
+}
+
+</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>

@@ -1,0 +1,7 @@
+{
+    "extensions": ["devonfw.devonfw-extension-pack"],
+    "settings": {"terminal.integrated.shell.linux": "/bin/bash"},
+    "dockerComposeFile":["../docker-compose.yml", "docker-compose.yml"],
+    "workspaceFolder":"/workspace",
+    "service": "angular"
+}

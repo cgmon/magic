@@ -1,0 +1,74 @@
+############################################################################
+# Copyright 2020 Capgemini SE.
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+############################################################################
+
+version: "3"
+
+services:
+  jenkins:
+    build: 
+      context: ./jenkins
+    privileged: true
+    user: root
+    restart: always
+    networks:
+      - dev
+    volumes:
+      - ./volumes/jenkins/jenkins_home:/var/jenkins_home
+      - ./jcasc:/var/jenkins_conf
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./app:/var/lib/jenkins/repo:ro
+    ports:
+      - 8000:8080
+    environment:
+      - CASC_JENKINS_CONFIG=/var/jenkins_conf
+
+  sonarqube:
+    build:
+      context: ./sonar
+    networks:
+      - dev
+    environment:
+      - sonar.jdbc.username=sonar
+      - sonar.jdbc.password=sonar123
+      - sonar.jdbc.url=jdbc:postgresql://sonarqube-db:5432/sonar
+    volumes:
+      - ./volumes/sonarqube/conf:/opt/sonarqube/conf
+      - ./volumes/sonarqube/data:/opt/sonarqube/data
+      - ./volumes/sonarqube/extensions:/opt/sonarqube/extensions
+      - ./volumes/sonarqube/lib/bundled-plugins:/opt/sonarqube/lib/bundled-plugins
+    ports:
+      - 9000:9000
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+
+  sonarqube-db:
+    image: "postgres:10-alpine"
+    networks:
+      - dev
+    volumes:
+      - ./volumes/sonarqube-db/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=sonar
+      - POSTGRES_PASSWORD=sonar123
+      - POSTGRES_DB=sonar
+      - PGDATA=/var/lib/postgresql/data
+
+networks:
+  dev:
+    driver: bridge
+

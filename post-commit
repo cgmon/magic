@@ -1,0 +1,5 @@
+#!/bin/sh
+if [ `git rev-parse --abbrev-ref HEAD` == "deploy" ]; then
+curl http://localhost:8000/job/magic/build
+curl http://localhost:8000/job/magic-two/build
+fi
