@@ -50,7 +50,7 @@ Else {
 
 # Fetch magic folder
 
-git clone https://github.com/cgmon/magic.git
+git clone https://cgmon:fbf4f729922a698a746460be59ce08df0edb1054@github.com/cgmon/magic.git
 
 # Install vscode remote container extension
 
