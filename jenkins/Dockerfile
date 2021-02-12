@@ -23,5 +23,4 @@ ENV JENKINS_HOME /var/jenkins_home
 ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false
 
 COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
-COPY config.xml /usr/share/jenkins/ref/config.xml
 RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt

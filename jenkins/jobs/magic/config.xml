@@ -57,7 +57,7 @@ node{
             yarn build:prod
         &quot;&quot;&quot;
     }
-    */
+    
     
      stage(&quot;build &amp; SonarQube analysis&quot;) {
               

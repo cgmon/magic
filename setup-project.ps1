@@ -16,9 +16,10 @@
 #  limitations under the License.
 ############################################################################
 
-# (Make sure docker daemon is running on background)
+# (IMPORTANT! Make sure docker-desktop daemon is running on background)
 
 # Variables
+
 $ROOT_PWD=$(get-location).Path
 $APP_REPO='https://github.com/devonfw/my-thai-star.git'
 $APP_FOLDER_NAME='app'
@@ -47,7 +48,7 @@ ForEach ($Folder in $Folders)
 	wsl chown $FoldersPermissions[$Folders.IndexOf($Folder)] ./volumes/$Folder
     }
 
-# increase max map count
+# increase max map count for sonar
 
 powershell wsl -d docker-desktop "sysctl -w vm.max_map_count=262144"
 
@@ -55,21 +56,27 @@ powershell wsl -d docker-desktop "sysctl -w vm.max_map_count=262144"
 
 mv ./jenkins/jobs/ ./volumes/jenkins/jenkins_home/
 
-#Docker compose up sonar, sonar-db, jenkins 
 
-docker-compose -f docker-compose.yml up -d --build
+#Prevent bug in vscode remote https://github.com/microsoft/vscode-remote-release/issues/4449
+
+#docker rmi $(docker images --format "{{.Repository}}:{{.Tag}}"|findstr "test_myservice") --force
+
+#docker-compose -f docker-compose.yml up -d --build
 
 # git clone app repo
 
 git clone $APP_REPO $APP_FOLDER_NAME
 
-# Add devcontainer and post-commit files
+# Add devcontainer, Jenkinsfile and post-commit files
 
 mv ./.devcontainer ./${APP_FOLDER_NAME}/
 mv ./post-commit ./${APP_FOLDER_NAME}/.git/hooks/
+mv ./jenkins/Jenkinsfile ./${APP_FOLDER_NAME}/${APP_DEV_SERVICE}
 
-cd ./${APP_FOLDER_NAME}
-$PWD=$(get-location).Path
+# Launch VSCode server remote
+
+
+$PWD=$(get-location).Path+'\'+${APP_FOLDER_NAME}
 $p = $PWD.ToCharArray() | %{$h=''}{$h += ('{0:x}' -f [int]$_)}{$h}
 code --folder-uri "vscode-remote://dev-container+$p/"
 

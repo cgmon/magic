@@ -1,7 +1,8 @@
 {
-    "extensions": ["devonfw.devonfw-extension-pack"],
-    "settings": {"terminal.integrated.shell.linux": "/bin/bash"},
-    "dockerComposeFile":["../docker-compose.yml", "docker-compose.yml"],
+    "name": "remote",
+    "dockerComposeFile": "../../docker-compose.yml",
     "workspaceFolder":"/workspace",
-    "service": "angular"
+    "service": "myservice",
+    "forwardPorts": [4200],
+    "shutdownAction": "stopCompose"
 }
