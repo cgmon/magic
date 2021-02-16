@@ -1,21 +1,5 @@
 #!/usr/bin/env pwsh
 
-############################################################################
-# Copyright 2020 Capgemini SE.
-#
-#  Licensed under the Apache License, Version 2.0 (the "License");
-#  you may not use this file except in compliance with the License.
-#  You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-#  Unless required by applicable law or agreed to in writing, software
-#  distributed under the License is distributed on an "AS IS" BASIS,
-#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#  See the License for the specific language governing permissions and
-#  limitations under the License.
-############################################################################
-
 # IMPORTANT: Works on Windows 10 Pro/Enterprise (16299+) or Windows 10 Home (18362.1040+)
 
 #To run in command promp as admin:  powershell -executionpolicy bypass -File install-dev.ps1 
@@ -46,11 +30,6 @@ Else {
         choco install $PackageName -y
     }
 }
-
-
-# Fetch magic folder
-
-git clone https://cgmon:fbf4f729922a698a746460be59ce08df0edb1054@github.com/cgmon/magic.git
 
 # Install vscode remote container extension
 

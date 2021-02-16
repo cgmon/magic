@@ -19,7 +19,7 @@
 node{
         
    stage(&apos;GitSCM&apos;){
-       git branch: &apos;develop&apos;, url: &apos;file:///var/lib/jenkins/repo&apos;
+       git branch: &apos;deploy&apos;, url: &apos;file:///var/lib/jenkins/repo&apos;
    }
    
     stage(&apos;Loading Custom Tools&apos;) {
