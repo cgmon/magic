@@ -1,5 +1,6 @@
 {
     "name": "remote",
+    "extensions":["devonfw.devonfw-extension-pack"],
     "dockerComposeFile": "../../docker-compose.yml",
     "workspaceFolder":"/workspace",
     "service": "myservice",

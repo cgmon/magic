@@ -9,7 +9,6 @@ $APP_REPO='https://github.com/devonfw/my-thai-star.git'
 $APP_FOLDER_NAME='app'
 $APP_DEV_SERVICE='angular'
 $APP_DOCKER_COMPOSE_DEFAULT_FILENAME= 'docker-compose.yml'
-$IP=(Test-Connection $env:COMPUTERNAME -Count 1).IPV4Address.IPAddressToString
 $Folders = 'jenkins/jenkins_home',
             'sonarqube/conf',
             'sonarqube/data',
@@ -45,7 +44,6 @@ mv ./jenkins/jobs/ ./volumes/jenkins/jenkins_home/
 
 #docker rmi $(docker images --format "{{.Repository}}:{{.Tag}}"|findstr "test_myservice") --force
 
-#docker-compose -f docker-compose.yml up -d --build
 
 # git clone app repo
 
