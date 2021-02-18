@@ -36,7 +36,7 @@ wget https://github.com/cgmon/magic/archive/0.1.0.tar.gz -O f.tar.gz | tar -xf f
 - Navigate to the root folder and execute `install-dev.ps1` script
 
 ```ps
-cd .\magic\
+cd .\magic-0.1.0\
 .\install-dev.ps1
 ```
 This will install on your system all required packages and automatically **restart your computer** afterwards.
@@ -53,7 +53,7 @@ This will install on your system all required packages and automatically **resta
 - Navigate to the root folder and execute `setup-project.ps1` script
 
 ```sh
-cd .\magic\
+cd .\magic-0.1.0\
 .\setup-project.ps1
 ```
 
