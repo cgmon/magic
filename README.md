@@ -39,7 +39,7 @@ This will install on your system all required packages and **restart your comput
 ## Initial assumptions
 
 - [My Thai Star App](https://github.com/devonfw/my-thai-star) is the default testing application and the development is front-end oriented
-- In order to demonstrate CICD Jenkins capabilities two pipelines jobs are created: [a SCM-hosted Jenkinsfile](https://github.com/cgmon/magic/blob/master/jenkins/Jenkinsfile) and [a scripted pipeline](https://github.com/cgmon/magic/blob/master/jenkins/jobs/magic/config.xml)
+- In order to demonstrate CICD Jenkins capabilities one pipeline job is created: [a scripted pipeline](https://github.com/cgmon/magic/blob/master/jenkins/jobs/magic/config.xml) which goes all through the project's compilation and testing stages and ends up by running a docker container of the project's image.
 - A Docker desktop instance is running on the backgroung
 ## Steps
 
