@@ -27,19 +27,12 @@
 - Open the Powershell console as admin <br>
 `WIN key + X` and select `Windows Powershell (Admin)`
 
-- Fetch and uncompress artifacts
+- Copy and `conjure up` the following spell-ish:
 
 ```ps
-wget https://github.com/cgmon/magic/archive/0.1.0.tar.gz -O f.tar.gz | tar -xf f.tar.gz
+mkdir magic; wget (Invoke-RestMethod -uri  https://api.github.com/repos/cgmon/magic/releases/latest | select -expand tarball_url) -o t.tar.gz | tar -xf t.tar.gz -C magic --strip-components 1; cd magic; .\install-dev.ps1
 ```
-
-- Navigate to the root folder and execute `install-dev.ps1` script
-
-```ps
-cd .\magic-0.1.0\
-.\install-dev.ps1
-```
-This will install on your system all required packages and automatically **restart your computer** afterwards.
+This will install on your system all required packages and **restart your computer** afterwards.
 
 # Demo
 
@@ -50,10 +43,10 @@ This will install on your system all required packages and automatically **resta
 - A Docker desktop instance is running on the backgroung
 ## Steps
 
-- Navigate to the root folder and execute `setup-project.ps1` script
+- Navigate to the root `magic` folder and execute `setup-project.ps1` script
 
 ```sh
-cd .\magic-0.1.0\
+cd .\magic\
 .\setup-project.ps1
 ```
 
