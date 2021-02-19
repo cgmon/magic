@@ -1,8 +1,5 @@
 #!/usr/bin/env pwsh
-
 # IMPORTANT: Works on Windows 10 Pro/Enterprise (16299+) or Windows 10 Home (18362.1040+)
-
-#To run in command promp as admin:  powershell -executionpolicy bypass -File install-dev.ps1 
 
 #Enable wsl options
 

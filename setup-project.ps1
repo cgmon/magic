@@ -1,5 +1,4 @@
 #!/usr/bin/env pwsh
-
 # (IMPORTANT! Make sure docker-desktop daemon is running on background)
 
 # Variables
@@ -39,12 +38,6 @@ powershell wsl -d docker-desktop "sysctl -w vm.max_map_count=262144"
 
 mv ./jenkins/jobs/ ./volumes/jenkins/jenkins_home/
 
-
-#Prevent bug in vscode remote https://github.com/microsoft/vscode-remote-release/issues/4449
-
-#docker rmi $(docker images --format "{{.Repository}}:{{.Tag}}"|findstr "test_myservice") --force
-
-
 # git clone app repo
 
 git clone $APP_REPO $APP_FOLDER_NAME
@@ -53,10 +46,8 @@ git clone $APP_REPO $APP_FOLDER_NAME
 
 mv ./.devcontainer ./${APP_FOLDER_NAME}/
 mv ./post-commit ./${APP_FOLDER_NAME}/.git/hooks/
-mv ./jenkins/Jenkinsfile ./${APP_FOLDER_NAME}/${APP_DEV_SERVICE}
 
 # Launch VSCode server remote
-
 
 $PWD=$(get-location).Path+'\'+${APP_FOLDER_NAME}
 $p = $PWD.ToCharArray() | %{$h=''}{$h += ('{0:x}' -f [int]$_)}{$h}
