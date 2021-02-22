@@ -17,6 +17,23 @@ function createJenkinsWebhook {
   curlAdmin -X POST "$BASE_URL/api/webhooks/create" -d "name=jenkins&url=http://jenkins:8080/sonarqube-webhook/"
 }
 
+function generateSQToken { 
+    echo "Waiting for jenkins connection on jenkins:8080"
+    until timeout 1 bash -c "cat < /dev/null > /dev/tcp/jenkins/8080"
+    do
+        echo "Waiting for jenkins connection..."
+        # wait for 5 seconds before check again
+        sleep 5
+    done
+
+token=$(curlAdmin -X POST -H "Content-Type: application/x-www-form-urlencoded" -d "name=jenkins"  "$BASE_URL/api/user_tokens/generate" | jq -r '.token' | xargs)
+echo "Jenkins token generated $token"
+COOKIEJAR="$(mktemp)"
+CRUMB=$(curlAdmin --cookie-jar "$COOKIEJAR" "http://jenkins:8080/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,%22:%22,//crumb)")
+curlAdmin -X POST --cookie "$COOKIEJAR" -H "$CRUMB" "http://jenkins:8080/credentials/store/system/domain/_/createCredentials" --data-urlencode 'json={"": "0","credentials": {"scope": "GLOBAL","id": "jenkins","description": "Automatically generated sonar token from windows","secret": "'"$token"'", "$class": "org.jenkinsci.plugins.plaincredentials.impl.StringCredentialsImpl"}}'
+
+}
+
 # Check if the database is ready for connections
 function waitForDatabase {
     # get HOST:PORT from JDBC URL
@@ -227,6 +244,7 @@ changeDefaultAdminPassword
 testAdminCredentials
 
 createJenkinsWebhook
+generateSQToken
 
 
 # (Re-)create the profiles

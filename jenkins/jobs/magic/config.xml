@@ -28,6 +28,7 @@ node{
         sh &quot;npm i -g yarn&quot;
     }
     
+    
 
     stage(&apos;Fresh Dependency Installation&apos;) {
         sh &quot;&quot;&quot;
@@ -44,12 +45,14 @@ node{
         &quot;&quot;&quot;
     }
     
+    /*
     stage(&apos;Execute Angular tests&apos;) {
         sh &quot;&quot;&quot;
             cd angular
             yarn test:ci
         &quot;&quot;&quot;
     }
+    */
     
     stage(&apos;Build Application&apos;) {
         sh &quot;&quot;&quot;
@@ -58,7 +61,7 @@ node{
         &quot;&quot;&quot;
     }
     
-    
+    */
      stage(&quot;build &amp; SonarQube analysis&quot;) {
               
                    def scannerHome = tool &quot;sonarqube&quot;
@@ -66,19 +69,21 @@ node{
                             sh &quot;&quot;&quot;
                                 ${scannerHome}/bin/sonar-scanner \
                                     -Dsonar.projectKey=&apos;myapp&apos; \
-                                    -Dsonar.login=&apos;admin&apos; \
-                                    -Dsonar.password=&apos;admin&apos; \
                                     -Dsonar.projectName=&apos;myapp&apos; \
                                     -Dsonar.projectVersion=&apos;1.0.0&apos; \
-                                    -Dsonar.sources=&apos;angular/src&apos;\
-                                    -Dsonar.webhooks.project=http://jenkins:8080/sonarqube-webhook/
+                                    -Dsonar.sources=&apos;angular/src&apos;
                             &quot;&quot;&quot;
-                            def qg = waitForQualityGate() 
-                        if (qg.status != &apos;OK&apos;) {
-                            error &quot;Pipeline aborted due to quality gate failure: ${qg.status}&quot;
-                        }
     
               }
+      }
+      
+    stage(&quot;Quality Gate&quot;){
+          timeout(time: 1, unit: &apos;HOURS&apos;) {
+              def qg = waitForQualityGate()
+              if (qg.status != &apos;OK&apos;) {
+                  error &quot;Pipeline aborted due to quality gate failure: ${qg.status}&quot;
+              }
+          }
       }
       
     stage(&apos;Build Image&apos;){
