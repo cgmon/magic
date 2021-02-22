@@ -13,6 +13,10 @@ function curlAdmin {
     curl -v -u "$BASIC_AUTH" "$@"
 }
 
+function createJenkinsWebhook {
+  curlAdmin -X POST "$BASE_URL/api/webhooks/create" -d "name=jenkins&url=http://jenkins:8080/sonarqube-webhook/"
+}
+
 # Check if the database is ready for connections
 function waitForDatabase {
     # get HOST:PORT from JDBC URL
@@ -196,6 +200,7 @@ function createProfile {
 ###########################################################################################################################
 BASE_URL=http://sonarqube:9000
 
+
 # waitForDatabase
 if [ "$SONARQUBE_JDBC_URL" ]; then
   waitForDatabase
@@ -220,6 +225,9 @@ waitForSonarUp
 changeDefaultAdminPassword
 
 testAdminCredentials
+
+createJenkinsWebhook
+
 
 # (Re-)create the profiles
 createProfile "ts-profile-v2.1.0" "Sonar%20way%20recommended" "ts"

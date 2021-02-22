@@ -120,3 +120,11 @@ tool:
           - nodeJSInstaller:
               id: "12.16.0"
               npmPackagesRefreshHours: 72
+  sonarRunnerInstallation:
+    installations:
+    - name: "sonarqube"
+      properties:
+      - installSource:
+          installers:
+          - sonarRunnerInstaller:
+              id: "4.6.0.2311"
