@@ -61,7 +61,6 @@ node{
         &quot;&quot;&quot;
     }
     
-    */
      stage(&quot;build &amp; SonarQube analysis&quot;) {
               
                    def scannerHome = tool &quot;sonarqube&quot;
